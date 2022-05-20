@@ -37,7 +37,7 @@ jobs:
 
       - name: Install dependencies
         run: |-
-          pwd || ls -al
+          ls -al
           yarn install --check-files
         working-directory: projects/github-oidc
 

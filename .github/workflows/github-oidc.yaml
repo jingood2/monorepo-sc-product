@@ -27,17 +27,17 @@ jobs:
     env:
       CI: "true"
     steps:
-      - name: Checkout AWS CDK Repo
-        uses: actions/checkout@v3
-
-      - uses: actions/setup-node@v2
+      - name: Checkout code
+        uses: actions/checkout@v2
         with:
-          node-version: "14"
+          fetch-depth: 1
+      - name: install npm
+        run: sudo apt update -y && sudo apt install nodejs npm -y
+        working-directory: projects/github-oidc
 
       - name: Install dependencies
-        uses: bahmutov/npm-install@v1
-        with:
-          working-directory: projects/github-oidc
+        run: yarn install --check-files
+        working-directory: projects/$github-oidc
 
       - name: assume role
         uses: aws-actions/configure-aws-credentials@master
@@ -56,4 +56,4 @@ jobs:
           
       - name: cdk deploy
         run: npm run deploy --all --require-approval never
-        working-directory: projects/infra
+        working-directory: projects/github-oidc

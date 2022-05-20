@@ -1,0 +1,56 @@
+name: "sample-cdk-app"
+
+on:
+  push:
+    branches:
+      - main
+      #- develop
+    paths:
+      - "projects/sample-cdk-app/**"
+      - ".github/workflows/sample-cdk-app.yaml"
+env:
+  CI: "true"
+  TESTING_STACK_NAME: "infra-sample-cdk-app-dev"
+  GITHUB_ASSUME_ROLE: arn:aws:iam::037729278610:role/github-deploy-role
+  TESTING_REGION: ap-northeast-2
+  PROD_STACK_NAME: "infra-sample-cdk-app-prod"
+  PROD_REGION: ap-northeast-2
+
+
+jobs:
+  cdk_build:
+    runs-on: ubuntu-latest
+     # These permissions are needed to interact with GitHub's OIDC Token endpoint
+    permissions:
+      id-token: write
+      contents: read
+    env:
+      CI: "true"
+    steps:
+      - name: Checkout AWS CDK Repo
+        uses: actions/checkout@v3
+        with:
+          path: projects/sample-cdk-app/
+
+      - uses: actions/setup-node@v2
+        with:
+          node-version: "14"
+
+      - name: Install dependencies
+        uses: bahmutov/npm-install@v1
+        with:
+          working-directory: ./sample-cdk-app/
+
+      - name: assume role
+        uses: aws-actions/configure-aws-credentials@master
+        with:
+          role-to-assume: ${{ env.GITHUB_ASSUME_ROLE }}
+          role-session-name: github-session
+          aws-region: ap-northeast-2
+
+      - name: Build and Synth stack
+        run: cd sample-cdk-app && npm run build 
+
+      - name: Deploy stack
+        run: cd sample-cdk-app && npm run deploy --all --require-approval never
+         

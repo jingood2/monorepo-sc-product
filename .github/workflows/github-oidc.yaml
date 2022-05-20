@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      #- develop
     paths:
       - "projects/github-oidc/**"
       - ".github/workflows/github-oidc.yaml"
@@ -28,8 +29,6 @@ jobs:
     steps:
       - name: Checkout AWS CDK Repo
         uses: actions/checkout@v3
-        with:
-          path: projects/github-oidc/
 
       - uses: actions/setup-node@v2
         with:
@@ -38,7 +37,7 @@ jobs:
       - name: Install dependencies
         uses: bahmutov/npm-install@v1
         with:
-          working-directory: ./github-oidc/
+          working-directory: projects/github-oidc
 
       - name: assume role
         uses: aws-actions/configure-aws-credentials@master
@@ -47,9 +46,14 @@ jobs:
           role-session-name: github-session
           aws-region: ap-northeast-2
 
-      - name: Build and Synth stack
-        run: cd github-oidc && npm run build 
+      - name: cdk diff
+        run: npm run diff
+        working-directory: projects/github-oidc
 
-      - name: Deploy stack
-        run: cd github-oidc && npm run deploy --all --require-approval never
-         
+      - name: cdk build 
+        run: npm run build 
+        working-directory: projects/github-oidc
+          
+      - name: cdk deploy
+        run: npm run deploy --all --require-approval never
+        working-directory: projects/infra

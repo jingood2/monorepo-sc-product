@@ -37,7 +37,7 @@ jobs:
       - name: Install dependencies
         uses: bahmutov/npm-install@v1
         with:
-          working-directory: ./projects/github-oidc
+          working-directory: projects/github-oidc
 
       - name: Install dependencies
         run : npm run projen

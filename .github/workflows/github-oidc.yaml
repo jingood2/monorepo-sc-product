@@ -27,14 +27,16 @@ jobs:
     env:
       CI: "true"
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v2
         with:
           fetch-depth: 1
+      - name: install npm
+        run: sudo apt update -y && sudo apt install nodejs npm -y
+        working-directory: projects/github-oidc
 
       - name: Install dependencies
-        run: |-
-          ls -al
-          yarn install --check-files
+        run: yarn install --check-files
         working-directory: projects/github-oidc
 
       - name: assume role

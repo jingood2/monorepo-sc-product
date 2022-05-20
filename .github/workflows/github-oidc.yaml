@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - main
-      #- develop
     paths:
       - "projects/github-oidc/**"
       - ".github/workflows/github-oidc.yaml"

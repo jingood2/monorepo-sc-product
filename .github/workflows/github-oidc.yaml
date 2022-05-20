@@ -37,7 +37,7 @@ jobs:
 
       - name: Install dependencies
         run: yarn install --check-files
-        working-directory: projects/$github-oidc
+        working-directory: projects/github-oidc
 
       - name: assume role
         uses: aws-actions/configure-aws-credentials@master

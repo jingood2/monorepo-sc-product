@@ -37,7 +37,7 @@ jobs:
 
       - name: Install dependencies
         run: yarn install --check-files
-        working-directory: projects/$cdk-s3
+        working-directory: projects/cdk-s3
 
       - name: assume role
         uses: aws-actions/configure-aws-credentials@master

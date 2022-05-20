@@ -37,7 +37,7 @@ jobs:
 
       - name: Install dependencies
         run: yarn install --check-files
-        working-directory: projects/$sample-cdk-app
+        working-directory: projects/sample-cdk-app
 
       - name: assume role
         uses: aws-actions/configure-aws-credentials@master
